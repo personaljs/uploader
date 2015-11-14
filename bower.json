@@ -2,7 +2,7 @@
   "name": "fbs-uploader",
   "version": "0.0.0",
   "authors": [
-    "Ivan Dolgov <idolgov@fbs.com>"
+    "Ivan Dolgov <ivan@on-moon.ru>"
   ],
   "main": "app.js",
   "license": "MIT",
