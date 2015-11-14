@@ -7,6 +7,8 @@ var errorHandler = require('errorhandler');
 var morgan = require('morgan');
 var http = require('http');
 var path = require('path');
+var multer = require('multer');
+var upload = multer({dest: './tmp/'});
 
 
 var app = module.exports = express();
@@ -24,16 +26,24 @@ app.use(bodyParser.json());
 // create application/x-www-form-urlencoded parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride());
+
 // development only
 if (env === 'development') {
 	app.use(errorHandler());
 }
 
-
-
 // routes
-app.post('/upload', function (req, res) {
-	return require('controllers/upload').upload(req, res);
+var uploadCtrl = require('controllers/upload');
+app.post('/upload', upload.any(), function (req, res) {
+	uploadCtrl.upload(req.files, req.query, req.body)
+		.then(function (data) {
+			res.json(data);
+		})
+		.catch(function (err){
+			res.status(500, {
+				error: err
+			});
+		});
 });
 app.get('*', function (req, res) {
 	res.sendFile(__dirname + '/public/index.html');

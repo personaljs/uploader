@@ -2,7 +2,7 @@
   "name": "fbs-uploader",
   "version": "0.0.0",
   "authors": [
-    "Ivan Dolgov <ivan@on-moon.ru>"
+    "Ivan Dolgov <idolgov@fbs.com>"
   ],
   "main": "app.js",
   "license": "MIT",
@@ -12,5 +12,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "lodash": "~3.10.1"
+  }
 }
