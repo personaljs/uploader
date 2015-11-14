@@ -1,0 +1,16 @@
+{
+  "name": "fbs-uploader",
+  "version": "0.0.0",
+  "authors": [
+    "Ivan Dolgov <idolgov@fbs.com>"
+  ],
+  "main": "app.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

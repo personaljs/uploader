@@ -1,0 +1,22 @@
+{
+  "name": "fbs-uploader",
+  "version": "1.0.0",
+  "description": "Uploader for uploading and editing files",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "I.Dolgov",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "error-handler": "^1.0.0",
+    "errorhandler": "^1.4.2",
+    "express": "^4.13.3",
+    "lwip": "0.0.8",
+    "method-override": "^2.3.5"
+  },
+  "devDependencies": {
+    "morgan": "^1.6.1"
+  }
+}
