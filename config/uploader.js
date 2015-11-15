@@ -3,6 +3,7 @@
 module.exports = {
   news_banner: {
     path: 'upload/news/banner',
+    resize: true,
     size: {
       width: 686,
       height: 286
@@ -27,10 +28,8 @@ module.exports = {
       height: 800
     }
   }
-}
+};
 // {
-
-
 //   "avatar": "upload/promo/avatar",
 //   "signature": "upload/promo/signature",
 //   "banner": "upload/promo/banner",

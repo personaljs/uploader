@@ -18,26 +18,28 @@ exports.upload = function(files, query, body) {
 		var dir = path.join(__dirname, '..', config.path);
 
 		// проверяем существует ли путь для сохранения
-		uploader.safeCreateDirectory(dir);
+		uploader.createDir(dir);
 
 		//ессли необходимо сделать уменьшеннуую копию
 		if (config.thumbnail) {
 			// проверяем путь к папке с уменьшенными копиями
-			uploader.safeCreateDirectory(path.join(dir, 'thumbnail'));
+			uploader.createDir( config.thumbnail.path || path.join(dir, 'thumbnail') );
 		}
 
-		return q.all(_.each(files, function(file) {
+		return q.all(
+			_.each(files, function (file) {
 
-						var ext = path.extname(file.originalname).substr(1, path.extname(file.originalname).lenght).toLowerCase();
+				var def = q.defer();
 
-						var def = q.defer();
+				var ext = uploader.extension(file.mimetype);
 
-						fs.readFile(file.path, function(err, data) {
-							if (err) throw err;
+					fs.readFile(file.path, function(err, data) {
+
+						if (err) return def.reject(err);
 
 							var exifData = false;
 							// ext is the extension of the image
-							if (ext == "jpg") {
+							if (ext === "jpeg") {
 								exifData = exif.create(data).parse();
 							}
 
@@ -46,6 +48,10 @@ exports.upload = function(files, query, body) {
 								if (err) def.reject(err);
 
 								image = image.batch();
+
+								if(config.resize) {
+									image = image.cover(config.size.width, config.size.height);
+								}
 
 								if (exifData) {
 									switch (exifData.tags.Orientation) {
@@ -77,7 +83,18 @@ exports.upload = function(files, query, body) {
 									.crop(config.size.width, config.size.height)
 									.writeFile(path.join(dir, file.filename + '.' + ext), ext, function(err) {
 										if(err) def.reject(err);
-										else def.resolve();
+
+										if(config.thumbnail) {
+											image
+												.cover(config.thumbnail.size.width, config.thumbnail.size.height)
+												.crop(config.thumbnail.size.width, config.thumbnail.size.height)
+												.writeFile( config.thumbnail.path || path.join(dir, 'thumbnail', file.filename + '.' + ext), ext, function (err) {
+													if(err) def.reject(err);
+													else def.resolve();
+												});
+										} else {
+											def.resolve();
+										}
 									});
 							});
 						});
@@ -85,8 +102,12 @@ exports.upload = function(files, query, body) {
 						return def.promise;
 					}))
 					.then(function(res) {
-						console.log(res);
-						return;
+						return q.all(_.each(res,function (file){
+							fs.unlink(file.path);
+						}))
+						.then(function (){
+							return res;
+						});
 					})
 					.catch(function() {
 						console.log(arguments);
