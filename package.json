@@ -15,7 +15,7 @@
     "errorhandler": "^1.4.2",
     "exif-parser": "^0.1.9",
     "express": "^4.13.3",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.19",
     "lwip": "0.0.8",
     "method-override": "^2.3.5",
     "mime": "^1.3.4",
